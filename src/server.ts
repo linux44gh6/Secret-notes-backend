@@ -2,10 +2,10 @@ import app from './app';
 import dotenv from "dotenv";
 import connectDb from './config/db';
 
-const PORT = 3000;
 
 dotenv.config();
 
+const PORT = process.env.PORT;
 const startServer=async()=>{
   try{
     await connectDb()

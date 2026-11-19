@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const connectDb=async()=>{
     try{
-        const mongoURI=process.env.MONGODB_URI
+        const mongoURI=process.env.MONGO_URI
         if(!mongoURI){
             throw new Error("MONGODB_URI is missing")
         }
