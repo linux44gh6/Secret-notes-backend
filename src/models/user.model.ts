@@ -2,10 +2,13 @@ import { Schema, model, Model } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { IUser } from '../interfaces';
 
+interface IUserMethods {
+  comparePassword(candidate: string): Promise<boolean>;
+}
 
-type UserModel = Model<IUser>;
+type UserModel = Model<IUser, {}, IUserMethods>;
 
-const userSchema = new Schema<IUser>(
+const userSchema = new Schema<IUser, UserModel, IUserMethods>(
   {
     name: {
          type: String,
@@ -53,4 +56,4 @@ userSchema.method('comparePassword', function (candidate: string) {
   return bcrypt.compare(candidate, this.password);
 });
 
-export const User = model<IUser>('User', userSchema);
+export const User = model<IUser, UserModel>('User', userSchema);

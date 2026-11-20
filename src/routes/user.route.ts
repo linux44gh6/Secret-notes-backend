@@ -4,7 +4,6 @@ import { auth, requireRole } from '../middleware/auth';
 
 const router = Router();
 
-// এই ফাইলের সব রুট শুধু Admin-এর জন্য
 router.use(auth, requireRole('admin'));
 
 router.post('/', userController.createUser);
