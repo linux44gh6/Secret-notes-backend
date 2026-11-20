@@ -1,8 +1,18 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import AppError from '../utils/appError';
+import { env } from '../config/env';
 import { JwtPayload, Role } from '../interfaces';
+import AppError from '../utils/appError';
 
+
+// req.user টাইপ যোগ করা
+declare global {
+  namespace Express {
+    interface Request {
+      user?: JwtPayload;
+    }
+  }
+}
 
 export const auth = (req: Request, _res: Response, next: NextFunction) => {
   const header = req.headers.authorization;
@@ -12,7 +22,7 @@ export const auth = (req: Request, _res: Response, next: NextFunction) => {
 
   try {
     const token = header.split(' ')[1];
-    req.user = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
+    req.user = jwt.verify(token, env.jwtSecret) as JwtPayload;
     next();
   } catch {
     next(new AppError(401, 'Unauthorized: invalid or expired token'));

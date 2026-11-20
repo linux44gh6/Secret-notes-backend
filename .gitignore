@@ -13,3 +13,4 @@ dist
 # Editor files
 .vscode
 .idea
+.vercel
