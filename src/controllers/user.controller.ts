@@ -3,7 +3,6 @@ import { CatchAsync } from '../utils/catchAsync';
 import { sendResponse } from '../utils/sendResponse';
 import { userService } from '../services/user.service';
 
-
 const createUser = CatchAsync(async (req: Request, res: Response) => {
   const result = await userService.createUser(req.body);
   sendResponse(res, {
@@ -55,10 +54,22 @@ const deleteUser = CatchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getUsersGroupedByInterests = CatchAsync(async (req: Request, res: Response) => {
+  const result = await userService.getUsersGroupedByInterests(req.query);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Users Grouped By Interests Retrieved Successfully',
+    meta: result.meta,
+    data: result.data,
+  });
+});
+
 export const userController = {
   createUser,
   getAllUsers,
   getSingleUser,
   updateUser,
   deleteUser,
+  getUsersGroupedByInterests,
 };

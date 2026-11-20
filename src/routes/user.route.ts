@@ -6,6 +6,8 @@ const router = Router();
 
 router.use(auth, requireRole('admin'));
 
+router.get('/group/interests', userController.getUsersGroupedByInterests);
+
 router.post('/', userController.createUser);
 router.get('/', userController.getAllUsers);
 router.get('/:id', userController.getSingleUser);
