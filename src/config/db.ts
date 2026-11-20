@@ -1,15 +1,21 @@
-import mongoose from "mongoose";
-const connectDb=async()=>{
-    try{
-        const mongoURI=process.env.MONGO_URI
-        if(!mongoURI){
-            throw new Error("MONGODB_URI is missing")
-        }
-        await mongoose.connect(mongoURI)
-        console.log('MongoDb connected succesfull')
-    }catch(error){
-        console.error('Faild to connect mongoDb')
-        process.exit(1)
-    }
-}
-export default connectDb
+import mongoose from 'mongoose';
+import { env } from './env';
+
+
+const globalWithMongoose = global as typeof globalThis & {
+  mongooseCache?: { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null };
+};
+
+const cache = globalWithMongoose.mongooseCache ?? { conn: null, promise: null };
+globalWithMongoose.mongooseCache = cache;
+
+export const connectDB = async () => {
+  if (cache.conn) return cache.conn;
+
+  if (!cache.promise) {
+    cache.promise = mongoose.connect(env.mongoUri);
+  }
+
+  cache.conn = await cache.promise;
+  return cache.conn;
+};
